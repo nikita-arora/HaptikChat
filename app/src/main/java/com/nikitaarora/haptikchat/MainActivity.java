@@ -16,7 +16,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,7 +24,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Button retry;
     private ImageView noInternet;
+    static boolean firstLoad=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +52,20 @@ public class MainActivity extends AppCompatActivity {
         retry = (Button) findViewById(R.id.btn_retry);
         noInternet = (ImageView) findViewById(R.id.img_no_internet);
 
+        if (!Utils.getStringPreferences(this, "completeChat").equals(""))    {
+            try {
+                JSONObject jsonObj = new JSONObject(Utils.getStringPreferences(this, "completeChat"));
+                parseData(jsonObj);
+                firstLoad = false;
+            } catch (Exception e)   {
+                e.printStackTrace();
+            }
+        }
+
         if (checkIfOnline())    {
             getData();
         }
+
         if (mRecyclerView.getVisibility() == View.VISIBLE)  {
             setProgressBarIndeterminateVisibility(false);
         }
@@ -102,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("No", new DialogInterface.OnClickListener()  {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
+                            dialog.dismiss();
                             noInternet.setVisibility(View.VISIBLE);
                             retry.setVisibility(View.VISIBLE);
                             retry.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                         retry.setVisibility(View.GONE);
                         noInternet.setVisibility(View.GONE);
                         parseData(response);
+                        Utils.saveSharedPref(MainActivity.this, "completeChat", response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -165,5 +176,8 @@ public class MainActivity extends AppCompatActivity {
         }
         mAdapter = new ChatAdapter(jsonArray, this);
         mRecyclerView.setAdapter(mAdapter);
+        if (!firstLoad) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

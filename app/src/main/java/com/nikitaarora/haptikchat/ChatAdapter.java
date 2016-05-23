@@ -10,13 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,7 +29,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public ChatAdapter (JSONArray jsonArray, Context context)   {
         super();
-
         this.jsonArray = sortJsonArray(jsonArray);
         this.mContext = context;
         this.mPicasso = Picasso.with(context);
@@ -45,7 +41,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             imgUser = (ImageView) itemView.findViewById(R.id.imgUser);
             imgYou = (ImageView) itemView.findViewById(R.id.imgUser_you);
 
@@ -69,7 +64,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
         final ChatMessages messages = new ChatMessages();
-
             JSONObject jsonObject;
             try {
                 jsonObject = jsonArray.getJSONObject(position);
@@ -100,7 +94,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         else    {
             holder.userLayout.setVisibility(View.VISIBLE);
             holder.yourLayout.setVisibility(View.GONE);
-
             if (messages.getImageUrl().isEmpty()) {
                 mPicasso.load(R.mipmap.haptik).into(holder.imgUser);
             } else {
@@ -117,7 +110,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 getCountDialog(messages);
             }
         });
-
         holder.yourLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +140,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public void buildDialog(Context context, String user_name, int count)    {
-
         try {
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage("Messages from "+user_name+": " +count)
@@ -188,20 +179,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private JSONArray sortJsonArray(JSONArray unsorted) {
         JSONArray sortedJsonArray = new JSONArray();
         List<JSONObject> jsonList = new ArrayList<>();
-
         try{
             for (int i = 0; i < unsorted.length(); i++) {
                 unsorted.getJSONObject(i).put("message-time",
                         convertToMilliSeconds(unsorted.getJSONObject(i).getString("message-time")));
                 jsonList.add(unsorted.getJSONObject(i));
             }
-
             Collections.sort(jsonList, new Comparator<JSONObject>() {
 
                 public int compare(JSONObject a, JSONObject b) {
                     String valA = new String();
                     String valB = new String();
-
                     try {
                         valA = String.valueOf(a.get("message-time"));
                         valB = String.valueOf(b.get("message-time"));
@@ -209,7 +197,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     return valA.compareTo(valB);
                 }
             });
@@ -221,7 +208,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         } catch (Exception e)   {
             e.printStackTrace();
         }
-
         return sortedJsonArray;
     }
 }
