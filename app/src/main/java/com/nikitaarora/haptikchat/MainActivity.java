@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                             noInternet.setVisibility(View.GONE);
                             retry.setVisibility(View.GONE);
                             startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            getData();
+                            
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener()  {
