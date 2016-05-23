@@ -3,9 +3,7 @@ package com.nikitaarora.haptikchat;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by Nikita on 23-05-2016.
- */
+// class created for handling shared preferences
 public class Utils {
     public static final String PREF_FILE = "PrefsFile";
     private static SharedPreferences sharedPreferences;
@@ -26,7 +24,7 @@ public class Utils {
 
     public static void saveSharedPref(Context context, String key, String string) {
         sharedPreferences = getSharedPreferences(context);
-        if (sharedPreferences == null) {
+        if (sharedPreferences != null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(key, string);
             editor.commit();

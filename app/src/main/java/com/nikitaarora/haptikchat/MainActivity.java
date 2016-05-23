@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         retry = (Button) findViewById(R.id.btn_retry);
         noInternet = (ImageView) findViewById(R.id.img_no_internet);
 
+        // data loaded from shared preference to be displayed before fresh data is loaded
         if (!Utils.getStringPreferences(this, "completeChat").equals(""))    {
             try {
                 JSONObject jsonObj = new JSONObject(Utils.getStringPreferences(this, "completeChat"));
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // check for active wifi or mobile data
     private boolean checkIfOnline() {
         boolean status = false;
         try {
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         return status;
     }
 
+    //show dialog to enable wifi
     private void showInternetSettings() {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -178,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
         }
         mAdapter = new ChatAdapter(jsonArray, this);
         mRecyclerView.setAdapter(mAdapter);
+
+        // flag set up to save calling notifyDataSetChanged on every instance
         if (!firstLoad) {
             mAdapter.notifyDataSetChanged();
         }

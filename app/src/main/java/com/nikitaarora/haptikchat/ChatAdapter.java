@@ -76,6 +76,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 e.printStackTrace();
             }
 
+        // messages from username ryan-a are taken as messages from current device
+
         if (messages.getUserName().equalsIgnoreCase("ryan-a"))   {
             holder.userLayout.setVisibility(View.GONE);
             holder.yourLayout.setVisibility(View.VISIBLE);
@@ -90,11 +92,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.txtMessageBodyYou.setText(messages.getMessageBody());
             holder.txtMessageInfoYou.setText(String.valueOf(messages.getMessageInfo()));
         }
-
         else    {
             holder.userLayout.setVisibility(View.VISIBLE);
             holder.yourLayout.setVisibility(View.GONE);
             if (messages.getImageUrl().isEmpty()) {
+                // default to handle users with no image-url
                 mPicasso.load(R.mipmap.haptik).into(holder.imgUser);
             } else {
                 mPicasso.load(messages.getImageUrl()).into(holder.imgUser);
@@ -118,6 +120,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         });
     }
 
+    // to fetch the number of messages sent by each user
     private void getCountDialog(ChatMessages msg)   {
         String username = msg.getUserName();
         int messageCount = 0;
@@ -157,6 +160,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
+    // timestamp converted to milliseconds for ease of sort
     private long convertToMilliSeconds(String date) {
         long timeInMilli = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -169,6 +173,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return timeInMilli;
     }
 
+    // milliseconds converted back to date time to be displayed
     private String convertToDateTime(long milliseconds)  {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM hh:mm a");
         Calendar calendar = Calendar.getInstance();
@@ -176,6 +181,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return formatter.format(calendar.getTime());
     }
 
+    // sort messages based on date time
     private JSONArray sortJsonArray(JSONArray unsorted) {
         JSONArray sortedJsonArray = new JSONArray();
         List<JSONObject> jsonList = new ArrayList<>();
