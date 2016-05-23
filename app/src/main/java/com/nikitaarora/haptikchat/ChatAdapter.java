@@ -178,10 +178,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return timeInMilli;
     }
 
-    private String convertToDateTime(long millisecnds)  {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private String convertToDateTime(long milliseconds)  {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM hh:mm a");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(millisecnds);
+        calendar.setTimeInMillis(milliseconds);
         return formatter.format(calendar.getTime());
     }
 
